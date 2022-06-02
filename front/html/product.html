@@ -78,8 +78,8 @@
         // Sending a receiving data in JSON format using GET method
 
         var xhr = new XMLHttpRequest();
-        var url = "localhost:3000/api/products/" + id;
-
+        var url = "http://localhost:3000/api/products/" + id;
+        console.log(url);
         xhr.open("GET", url, true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.onreadystatechange = function () {
@@ -87,11 +87,33 @@
             var json = JSON.parse(xhr.responseText);
             console.log(json);
 
-            for (var i = 0; i < json.length; i++) {
-              a = document.createElement("a");
-              a.id = "link" + i;
-              a.href = "./product.html?id=" + json[i]._id;
-              document.getElementById("items").appendChild(a);
+            img = document.createElement("img");
+            img.src = json.imageUrl;
+            img.alt = json.altTxt;
+            document.getElementById("item__img").appendChild(img);
+
+            h1 = document.createElement("h1");
+            h1.innerHTML = json.name;
+            h1.id = "title";
+            document
+              .getElementById("item__content__titlePrice")
+              .appendChild(h1);
+
+            span = document.createElement("span");
+            span.innerHTML = json.price;
+            span.id = "price";
+            document.getElementById("price").appendChild(span);
+
+            p = document.createElement("p");
+            p.innerHTML = json.description;
+            p.id = "price";
+            document.getElementById("description").appendChild(p);
+
+            for (var i = 0; i < json.colors.length; i++) {
+              option = document.createElement("option");
+              option.innerHTML = json.colors[i];
+              option.value = json.colors[i];
+              document.getElementById("colors").appendChild(option);
             }
           }
         };
@@ -103,11 +125,12 @@
       <div class="limitedWidthBlock">
         <section class="item">
           <article>
-            <div class="item__img">
-              <!-- <img src="../images/logo.png" alt="Photographie d'un canapé"> -->
-            </div>
-            <div class="item__content">
-              <div class="item__content__titlePrice">
+            <div class="item__img" id="item__img"></div>
+            <div class="item__content" id="item__content">
+              <div
+                id="item__content__titlePrice"
+                class="item__content__titlePrice"
+              >
                 <h1 id="title"><!-- Nom du produit --></h1>
                 <p>
                   Prix : <span id="price"><!-- 42 --></span>€
@@ -116,9 +139,7 @@
 
               <div class="item__content__description">
                 <p class="item__content__description__title">Description :</p>
-                <p id="description">
-                  <!-- Dis enim malesuada risus sapien gravida nulla nisl arcu. -->
-                </p>
+                <p id="description"></p>
               </div>
 
               <div class="item__content__settings">
@@ -126,8 +147,6 @@
                   <label for="color-select">Choisir une couleur :</label>
                   <select name="color-select" id="colors">
                     <option value="">--SVP, choisissez une couleur --</option>
-                    <option value="vert">vert</option>
-                    <option value="blanc">blanc</option>
                   </select>
                 </div>
 
