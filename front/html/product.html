@@ -115,6 +115,26 @@
               option.value = json.colors[i];
               document.getElementById("colors").appendChild(option);
             }
+
+            document
+              .getElementById("colors")
+              .addEventListener("change", optionselected);
+            document
+              .getElementById("quantity")
+              .addEventListener("change", quantity_selected);
+
+            function optionselected() {
+              var select = document.getElementById("colors");
+              var option = select.options[select.selectedIndex].text;
+              console.log(JSON.stringify(option));
+              localStorage.color = JSON.stringify(option);
+            }
+            function quantity_selected() {
+              console.log(document.getElementById("quantity").value);
+              localStorage.quantity = document.getElementById("quantity").value;
+            }
+
+            localStorage._id = json._id;
           }
         };
         xhr.send();
@@ -166,7 +186,12 @@
               </div>
 
               <div class="item__content__addButton">
-                <button id="addToCart">Ajouter au panier</button>
+                <button
+                  onclick="window.location.href='http://localhost/Projet5_openclassroom-main/front/html/cart.html'"
+                  id="addToCart"
+                >
+                  Ajouter au panier
+                </button>
               </div>
             </div>
           </article>

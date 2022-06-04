@@ -67,6 +67,7 @@
       <img class="banniere" src="../images/banniere.png" alt="Baniere" />
     </header>
 
+
     <main class="limitedWidthBlockContainer">
       <div class="limitedWidthBlock" id="limitedWidthBlock">
         <div class="cartAndFormContainer" id="cartAndFormContainer">
@@ -79,15 +80,12 @@
                 data-color="{product-color}"
               >
                 <div class="cart__item__img">
-                  <img
-                    src="../images/product01.jpg"
-                    alt="Photographie d'un canapé"
-                  />
+                 
                 </div>
                 <div class="cart__item__content">
                   <div class="cart__item__content__description">
-                    <h2>Nom du produit</h2>
-                    <p>Vert</p>
+                    <h2><Nom du produit></h2>
+                    <p><script>document.write(localStorage.color)</script></p>
                     <p>42,00 €</p>
                   </div>
                   <div class="cart__item__content__settings">
@@ -179,7 +177,7 @@
         <div class="limitedWidthBlock">
           <p>
             © Copyright 2021 - 2042 | Openclassrooms by Openclassrooms | All
-            Rights Reserved | Powered by <3
+            Rights Reserved | Powered by
           </p>
         </div>
       </div>
@@ -187,3 +185,52 @@
     <script src="../js/cart.js"></script>
   </body>
 </html>
+
+
+
+
+<script>
+   
+
+
+   
+
+  // Sending a receiving data in JSON format using GET method
+
+
+  
+  var xhr = new XMLHttpRequest();
+  var url = "http://localhost:3000/api/products/" + localStorage._id.toString();
+  console.log(url);
+  xhr.open("GET", url, true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+    
+      var json = JSON.parse(xhr.responseText);
+      console.log("djidjsifdjij");
+      console.log(json);
+    
+      prix_total = json.price*localStorage.quantity;
+      console.log(json.price);
+      console.log(localStorage.quantity);
+      console.log(prix_total);
+
+      console.log(localStorage.color);
+      console.log(localStorage.quantity);
+      console.log(localStorage._id);
+      
+      
+      img = document.createElement("img");
+      img.src = json.imageUrl;
+      img.alt = json.altTxt;
+      document.getElementById("cart__item__img").appendChild(img);
+    }
+  }
+  xhr.send();
+  
+
+
+
+
+</script>
