@@ -68,24 +68,29 @@
     </header>
 
     <script>
+      var array = localStorage.getItem("myArray");
+      console.log(JSON.parse(array));
+
       var urlcourante = document.location.href;
       var url = new URL(urlcourante);
       var search_params = new URLSearchParams(url.search);
+
       if (search_params.has("id")) {
         var id = search_params.get("id");
-        console.log(id);
+
+        // console.log(id);
 
         // Sending a receiving data in JSON format using GET method
 
         var xhr = new XMLHttpRequest();
         var url = "http://localhost:3000/api/products/" + id;
-        console.log(url);
+        // console.log(url);
         xhr.open("GET", url, true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.onreadystatechange = function () {
           if (xhr.readyState === 4 && xhr.status === 200) {
             var json = JSON.parse(xhr.responseText);
-            console.log(json);
+            // console.log(json);
 
             img = document.createElement("img");
             img.src = json.imageUrl;
@@ -123,18 +128,44 @@
               .getElementById("quantity")
               .addEventListener("change", quantity_selected);
 
+            var color_item;
+            var quantity_item;
+
             function optionselected() {
               var select = document.getElementById("colors");
               var option = select.options[select.selectedIndex].text;
-              console.log(JSON.stringify(option));
-              localStorage.color = JSON.stringify(option);
+              // console.log(JSON.stringify(option));
+              color_item = JSON.stringify(option);
             }
             function quantity_selected() {
-              console.log(document.getElementById("quantity").value);
-              localStorage.quantity = document.getElementById("quantity").value;
+              // console.log(document.getElementById("quantity").value);
+              quantity_item = document.getElementById("quantity").value;
             }
 
+            // Store an array in local storage
+            // The array to store
+
+            if (localStorage.getItem("myArray") != []) {
+              var studentsData =
+                JSON.parse(localStorage.getItem("myArray")) || [];
+            } else {
+              var studentsData = [];
+            }
+
+            document
+              .getElementById("addToCart")
+              .addEventListener("click", localStorageadd);
+
             localStorage._id = json._id;
+
+            function localStorageadd() {
+              studentsData.push([localStorage._id, quantity_item, color_item]);
+              localStorage.setItem("myArray", JSON.stringify(studentsData));
+              // window.location.href = "../../front/html/cart.html";
+
+              array = JSON.parse(localStorage.getItem("myArray")) || [];
+              console.log(array);
+            }
           }
         };
         xhr.send();
@@ -186,12 +217,7 @@
               </div>
 
               <div class="item__content__addButton">
-                <button
-                  onclick="window.location.href='../../front/html/cart.html'"
-                  id="addToCart"
-                >
-                  Ajouter au panier
-                </button>
+                <button id="addToCart">Ajouter au panier</button>
               </div>
             </div>
           </article>
