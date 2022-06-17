@@ -180,18 +180,71 @@ window.onload = function () {
     }
   })();
 
+  document.getElementById("order").addEventListener("click", validateForm);
+
   function validateForm() {
-    var name = document.getElementsByName("firstName").value;
-    console.log(document.getElementsByName("firstName").value);
-    if (name.value == 1) {
-      document.getElementById("errorname").innerHTML =
-        "Veuillez entrez un nom valide";
-      name.focus();
-      return false;
+    if (
+      document.getElementById("firstName").value == "" ||
+      document.getElementById("lastName").value == "" ||
+      document.getElementById("city").value == "" ||
+      document.getElementById("address").value == "" ||
+      document.getElementById("email").value == ""
+    ) {
+      window.alert("Veuillez remplir tout les champs");
     } else {
-      document.getElementById("errorname").innerHTML = "";
+      var champ = [
+        document.getElementById("firstName").value,
+        document.getElementById("lastName").value,
+        document.getElementById("city").value,
+        document.getElementById("address").value,
+      ];
+      for (var k = 0; k < champ.length; k++) {
+        if (champ[k].match(/^([A-Za-z_-]){0,20}$/)) {
+          switch (k) {
+            case 0:
+              message = document.getElementById("firstNameErrorMsg");
+              message.innerHTML = "";
+              break;
+            case 1:
+              message2 = document.getElementById("lastNameErrorMsg");
+              message2.innerHTML = "";
+              break;
+            case 2:
+              message3 = document.getElementById("cityErrorMsg");
+              message3.innerHTML = "";
+              break;
+            case 3:
+              message4 = document.getElementById("addressErrorMsg");
+              message4.innerHTML = "";
+              break;
+            default:
+              break;
+          }
+        } else {
+          //content settings delete
+
+          switch (k) {
+            case 0:
+              message = document.getElementById("firstNameErrorMsg");
+              message.innerHTML = "Veuillez retirer les nombre dans ce champ";
+              break;
+            case 1:
+              message2 = document.getElementById("lastNameErrorMsg");
+              message2.innerHTML = "Veuillez retirer les nombre dans ce champ";
+              break;
+            case 2:
+              message3 = document.getElementById("cityErrorMsg");
+              message3.innerHTML = "Veuillez retirer les nombre dans ce champ";
+              break;
+            case 3:
+              message4 = document.getElementById("addressErrorMsg");
+              message4.innerHTML = "Veuillez retirer les nombre dans ce champ";
+              break;
+            default:
+              break;
+          }
+        }
+      }
     }
   }
-
-  document.getElementById("order").addEventListener("click", validateForm);
 };

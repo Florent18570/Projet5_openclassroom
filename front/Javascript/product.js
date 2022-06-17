@@ -86,12 +86,29 @@ if (search_params.has("id")) {
       localStorage._id = json._id;
 
       function localStorageadd() {
-        studentsData.push([localStorage._id, quantity_item, color_item]);
-        localStorage.setItem("myArray", JSON.stringify(studentsData));
-        // window.location.href = "../../front/html/cart.html";
+        if (
+          document.getElementById("colors").value == "" ||
+          document.getElementById("quantity").value == ""
+        ) {
+          window.alert("Veuillez remplir tout les champs");
+        } else if (
+          document.getElementById("colors").value ==
+          "--SVP, choisissez une couleur --"
+        ) {
+          window.alert("Merci de choisir une couleur");
+        } else if (
+          document.getElementById("quantity").value <= 0 ||
+          document.getElementById("quantity").value > 100
+        ) {
+          window.alert("Merci de remplir une quantité entre 1 et 100");
+        } else {
+          studentsData.push([localStorage._id, quantity_item, color_item]);
+          localStorage.setItem("myArray", JSON.stringify(studentsData));
+          // window.location.href = "../../front/html/cart.html";
 
-        array = JSON.parse(localStorage.getItem("myArray")) || [];
-        console.log(array);
+          array = JSON.parse(localStorage.getItem("myArray")) || [];
+          console.log(array);
+        }
       }
     }
   };
