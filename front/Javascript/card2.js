@@ -204,21 +204,30 @@ window.onload = function () {
             case 0:
               message = document.getElementById("firstNameErrorMsg");
               message.innerHTML = "";
+              var1 = 0;
               break;
             case 1:
               message2 = document.getElementById("lastNameErrorMsg");
               message2.innerHTML = "";
+              var2 = 0;
               break;
             case 2:
               message3 = document.getElementById("cityErrorMsg");
               message3.innerHTML = "";
+              var3 = 0;
               break;
             case 3:
               message4 = document.getElementById("addressErrorMsg");
               message4.innerHTML = "";
+              var4 = 0;
               break;
             default:
               break;
+          }
+          if (var1 == 0 || var2 == 0 || var3 == 0 || var4 == 0) {
+            document
+              .getElementById("order")
+              .addEventListener("click", sendform);
           }
         } else {
           //content settings delete
@@ -227,18 +236,22 @@ window.onload = function () {
             case 0:
               message = document.getElementById("firstNameErrorMsg");
               message.innerHTML = "Veuillez retirer les nombre dans ce champ";
+              var1 = 1;
               break;
             case 1:
               message2 = document.getElementById("lastNameErrorMsg");
               message2.innerHTML = "Veuillez retirer les nombre dans ce champ";
+              var2 = 1;
               break;
             case 2:
               message3 = document.getElementById("cityErrorMsg");
               message3.innerHTML = "Veuillez retirer les nombre dans ce champ";
+              var3 = 1;
               break;
             case 3:
               message4 = document.getElementById("addressErrorMsg");
               message4.innerHTML = "Veuillez retirer les nombre dans ce champ";
+              var4 = 1;
               break;
             default:
               break;
@@ -248,3 +261,27 @@ window.onload = function () {
     }
   }
 };
+
+function sendform() {
+  var xhr = new XMLHttpRequest();
+
+  var url = (url = "http://localhost:3000/api/products/order");
+  xhr.open("POST", url, true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      var json = JSON.parse(xhr.responseText);
+
+      document.write(url);
+    }
+  };
+  var data = JSON.stringify({
+    firstName: message,
+    lastName: message2,
+    address: message3,
+    city: message4,
+    email: document.getElementById("email").value,
+    productID: array,
+  });
+  xhr.send(data);
+}
