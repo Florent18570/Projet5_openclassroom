@@ -296,6 +296,12 @@ window.onload = function () {
 };
 
 function send(e) {
+  let idProducts = [];
+  for (let i = 0; i < array.length; i++) {
+    idProducts.push(array[i][0]);
+  }
+  console.log(idProducts);
+
   /**
    *
    * Expects request to contain:
@@ -309,7 +315,6 @@ function send(e) {
    * products: [string] <-- array of product _id
    *
    */
-
   commandeFinale = {
     contact: {
       firstName: document.getElementById("firstName").value,
@@ -318,7 +323,7 @@ function send(e) {
       city: document.getElementById("city").value,
       email: document.getElementById("email").value,
     },
-    products: "toto",
+    products: idProducts,
   };
 
   // vision sur le paquet que l'on veut envoyer
@@ -327,39 +332,25 @@ function send(e) {
   // si le panierId contient des articles et que le clic est autorisé
 
   // envoi à la ressource api
-  fetch("http://localhost:3000/api/products/order", {
+  const options = {
     method: "POST",
+    body: JSON.stringify(commandeFinale),
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(commandeFinale),
-  })
-    .then((res) => res.json())
-    // .then((data) => {
-    // envoyé à la page confirmation, autre écriture de la valeur "./confirmation.html?commande=${data.orderId}"
-    // window.location.href = `http://localhost/Projet5/front/html/confirmation.html?commande=${data.orderId}`;
-    // })
+  };
 
-    .catch(function (err) {
-      console.log(err);
-      alert("erreur");
+  fetch("http://localhost:3000/api/products/order", options)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      localStorage.clear();
+      localStorage.setItem("orderId", data.orderId);
+
+      document.location.href = "confirmation.html";
+    })
+    .catch((err) => {
+      alert("Problème avec fetch : " + err.message);
     });
 }
-(function Commande() {
-  if (page.match("confirmation")) {
-    sessionStorage.clear();
-    localStorage.clear();
-    // valeur du numero de commande
-    let numCom = new URLSearchParams(document.location.search).get("commande");
-    // merci et mise en page
-    document.querySelector(
-      "#orderId"
-    ).innerHTML = `<br>${numCom}<br>Merci pour votre achat`;
-    console.log("valeur de l'orderId venant de l'url: " + numCom);
-    //réinitialisation du numero de commande
-    numCom = undefined;
-  } else {
-    console.log("sur page cart");
-  }
-})();
