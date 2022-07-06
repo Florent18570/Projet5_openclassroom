@@ -1,9 +1,13 @@
+// pour différancier la page confirmation et panier
+const page = document.location.href;
 array = JSON.parse(localStorage.getItem("myArray")) || [];
 
 window.onload = function () {
   var f = (function () {
     var xhr = [],
       i;
+    var somme = 0;
+    var somme2 = 0;
     for (var i = 0; i < array.length; i++) {
       //for loop
       (function (i) {
@@ -13,7 +17,7 @@ window.onload = function () {
         xhr[i].onreadystatechange = function () {
           if (xhr[i].readyState === 4 && xhr[i].status === 200) {
             var json = JSON.parse(xhr[i].responseText);
-            console.log(json);
+            // console.log(json);
             prix_total = json.price * localStorage.quantity;
 
             div_supp = document.createElement("div");
@@ -78,6 +82,7 @@ window.onload = function () {
 
             p3 = document.createElement("p");
             p3.id = "p_value" + i;
+            p3.value = array[i][1] * json.price;
             p3.innerHTML = array[i][1] * json.price;
             p3.className = "p_value";
 
@@ -137,6 +142,15 @@ window.onload = function () {
             p5.className = "deleteItem";
             p5.innerHTML = "Supprimer";
 
+            totalQuantity = document.getElementById("totalQuantity");
+            totalQuantity.innerHTML = array.length;
+
+            // console.log(document.getElementById("p_value" + i).value);
+            somme += document.getElementById("p_value" + i).value;
+            // console.log(somme);
+
+            document.getElementById("totalPrice").innerHTML = somme.toString();
+
             document
               .getElementById("cart__item__content__settings__delete" + i)
               .appendChild(p5);
@@ -148,8 +162,24 @@ window.onload = function () {
             function change_total_price() {
               document.getElementById("p_value" + i).innerHTML =
                 json.price * document.getElementById("itemQuantity" + i).value;
-              console.log(
-                json.price * document.getElementById("itemQuantity" + i).value
+              // console.log(
+              //   json.price * document.getElementById("itemQuantity" + i).value
+              // );
+
+              // for (var l = 0; i < array.length; l++) {
+
+              // }
+              var l = 0;
+              somme2 = 0;
+              while (l != array.length) {
+                somme2 += parseInt(
+                  document.getElementById("p_value" + l).innerHTML
+                );
+                l++;
+              }
+
+              parseInt(
+                (document.getElementById("totalPrice").innerHTML = somme2)
               );
             }
 
@@ -164,11 +194,11 @@ window.onload = function () {
               while (myNode.firstChild) {
                 myNode.removeChild(myNode.firstChild);
               }
-              console.log(array.length);
+              // console.log(array.length);
               var spliced = array.splice(i, 3);
 
-              console.log(spliced);
-              console.log("Remaining elements: " + array);
+              // console.log(spliced);
+              // console.log("Remaining elements: " + array);
               // localStorage.clear();
               localStorage.setItem("myArray", JSON.stringify(array));
               location.reload();
@@ -199,6 +229,11 @@ window.onload = function () {
         document.getElementById("address").value,
       ];
       for (var k = 0; k < champ.length; k++) {
+        var var1;
+        var var2;
+        var var3;
+        var var4;
+
         if (champ[k].match(/^([A-Za-z_-]){0,20}$/)) {
           switch (k) {
             case 0:
@@ -224,10 +259,8 @@ window.onload = function () {
             default:
               break;
           }
-          if (var1 == 0 || var2 == 0 || var3 == 0 || var4 == 0) {
-            document
-              .getElementById("order")
-              .addEventListener("click", sendform);
+          if (var1 == 0 && var2 == 0 && var3 == 0 && var4 == 0) {
+            document.getElementById("order").addEventListener("click", send);
           }
         } else {
           //content settings delete
@@ -262,26 +295,71 @@ window.onload = function () {
   }
 };
 
-function sendform() {
-  var xhr = new XMLHttpRequest();
+function send(e) {
+  /**
+   *
+   * Expects request to contain:
+   * contact: {
+   *   firstName: string,
+   *   lastName: string,
+   *   address: string,
+   *   city: string,
+   *   email: string
+   * }
+   * products: [string] <-- array of product _id
+   *
+   */
 
-  var url = (url = "http://localhost:3000/api/products/order");
-  xhr.open("POST", url, true);
-  xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      var json = JSON.parse(xhr.responseText);
-
-      document.write(url);
-    }
+  commandeFinale = {
+    contact: {
+      firstName: document.getElementById("firstName").value,
+      lastName: document.getElementById("lastName").value,
+      address: document.getElementById("address").value,
+      city: document.getElementById("city").value,
+      email: document.getElementById("email").value,
+    },
+    products: "toto",
   };
-  var data = JSON.stringify({
-    firstName: message,
-    lastName: message2,
-    address: message3,
-    city: message4,
-    email: document.getElementById("email").value,
-    productID: array,
-  });
-  xhr.send(data);
+
+  // vision sur le paquet que l'on veut envoyer
+  console.log(commandeFinale);
+
+  // si le panierId contient des articles et que le clic est autorisé
+
+  // envoi à la ressource api
+  fetch("http://localhost:3000/api/products/order", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(commandeFinale),
+  })
+    .then((res) => res.json())
+    // .then((data) => {
+    // envoyé à la page confirmation, autre écriture de la valeur "./confirmation.html?commande=${data.orderId}"
+    // window.location.href = `http://localhost/Projet5/front/html/confirmation.html?commande=${data.orderId}`;
+    // })
+
+    .catch(function (err) {
+      console.log(err);
+      alert("erreur");
+    });
 }
+(function Commande() {
+  if (page.match("confirmation")) {
+    sessionStorage.clear();
+    localStorage.clear();
+    // valeur du numero de commande
+    let numCom = new URLSearchParams(document.location.search).get("commande");
+    // merci et mise en page
+    document.querySelector(
+      "#orderId"
+    ).innerHTML = `<br>${numCom}<br>Merci pour votre achat`;
+    console.log("valeur de l'orderId venant de l'url: " + numCom);
+    //réinitialisation du numero de commande
+    numCom = undefined;
+  } else {
+    console.log("sur page cart");
+  }
+})();
