@@ -1,5 +1,6 @@
 // pour différancier la page confirmation et panier
 const page = document.location.href;
+// retrieve the value of the localstorage in the variable "array"
 array = JSON.parse(localStorage.getItem("myArray")) || [];
 
 window.onload = function () {
@@ -8,8 +9,8 @@ window.onload = function () {
       i;
     var somme = 0;
     var somme2 = 0;
+
     for (var i = 0; i < array.length; i++) {
-      //for loop
       (function (i) {
         xhr[i] = new XMLHttpRequest();
         url = "http://localhost:3000/api/products/" + array[i][0];
@@ -17,9 +18,11 @@ window.onload = function () {
         xhr[i].onreadystatechange = function () {
           if (xhr[i].readyState === 4 && xhr[i].status === 200) {
             var json = JSON.parse(xhr[i].responseText);
-            // console.log(json);
+
+            // total price
             prix_total = json.price * localStorage.quantity;
 
+            // creation of html tags with the values retrieved with the rest api
             div_supp = document.createElement("div");
             div_supp.id = "div_supp" + i;
             div_supp.className = "div_supp";
@@ -145,10 +148,7 @@ window.onload = function () {
             totalQuantity = document.getElementById("totalQuantity");
             totalQuantity.innerHTML = array.length;
 
-            // console.log(document.getElementById("p_value" + i).value);
             somme += document.getElementById("p_value" + i).value;
-            // console.log(somme);
-
             document.getElementById("totalPrice").innerHTML = somme.toString();
 
             document
@@ -159,16 +159,12 @@ window.onload = function () {
               .getElementById("itemQuantity" + i)
               .addEventListener("change", change_total_price);
 
+            /**
+             * display of the total price
+             * */
             function change_total_price() {
               document.getElementById("p_value" + i).innerHTML =
                 json.price * document.getElementById("itemQuantity" + i).value;
-              // console.log(
-              //   json.price * document.getElementById("itemQuantity" + i).value
-              // );
-
-              // for (var l = 0; i < array.length; l++) {
-
-              // }
               var l = 0;
               somme2 = 0;
               while (l != array.length) {
@@ -188,18 +184,15 @@ window.onload = function () {
               .getElementById("deleteItem" + i)
               .addEventListener("click", delete_article);
 
+            /**
+             * function to remove an item from the basket
+             * */
             function delete_article() {
               array = JSON.parse(localStorage.getItem("myArray")) || [];
               var myNode = document.getElementById("div_supp" + i);
               while (myNode.firstChild) {
                 myNode.removeChild(myNode.firstChild);
               }
-              // console.log(array.length);
-              var spliced = array.splice(i, 3);
-
-              // console.log(spliced);
-              // console.log("Remaining elements: " + array);
-              // localStorage.clear();
               localStorage.setItem("myArray", JSON.stringify(array));
               location.reload();
             }
@@ -209,7 +202,6 @@ window.onload = function () {
       })(i);
     }
   })();
-
   document.getElementById("order").addEventListener("click", validateForm);
 };
 

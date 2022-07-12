@@ -4,5 +4,4 @@ function main() {
   console.log(localStorage.getItem("orderId"));
   localStorage.clear();
 }
-
 main();
