@@ -102,15 +102,65 @@ if (search_params.has("id")) {
         ) {
           window.alert("Merci de remplir une quantité entre 1 et 100");
         } else {
-          studentsData.push([localStorage._id, quantity_item, color_item]);
-          localStorage.setItem("myArray", JSON.stringify(studentsData));
-          // window.location.href = "../../front/html/cart.html";
+          //Si il n'y a pas de canap
 
-          array = JSON.parse(localStorage.getItem("myArray")) || [];
-          console.log(array);
+          // Crée et ajoute des valeurs dans le localstorage
+          if (array == null || array == []) {
+            console.log("titi");
+            studentsData.push([localStorage._id, quantity_item, color_item]);
+            localStorage.setItem("myArray", JSON.stringify(studentsData));
+
+            array = JSON.parse(localStorage.getItem("myArray")) || [];
+          }
+
+          // Si le local storage existe
+          // Si la valeur ne vaut pas exactement la meme ajoute un nouveau
+          //canap sinon ajouter +1 dans l'ancien canap
+          else {
+            array = JSON.parse(localStorage.getItem("myArray"));
+            // console.log(array.length);
+            var l = 0;
+            for (var m = 0; m < array.length; m++) {
+              if (
+                array[m][0] == id &&
+                array[m][2].replaceAll('"', "") ==
+                  document.getElementById("colors").value
+              ) {
+                storageqte = parseInt(array[m][1]);
+                qte_form = parseInt(quantity_item);
+                console.log(array);
+                array[m][0] = id;
+                array[m][1] = (storageqte + qte_form).toString();
+                array[m][2] = document.getElementById("colors").value;
+
+                if (storageqte + qte_form > 100) {
+                  window.alert("Le nombre de canapé dépasse la limite fixé ! ");
+                } else {
+                  console.log(array);
+                  console.log(storageqte + qte_form);
+                  localStorage.setItem("myArray", JSON.stringify(array));
+                  array = JSON.parse(localStorage.getItem("myArray")) || [];
+                  window.alert(
+                    "combinaison canap existe déjà vous avez ajouté " +
+                      quantity_item +
+                      " items dans le panier"
+                  );
+                  l = 1;
+                  // console.log(array2);
+                }
+              }
+            }
+
+            if (l == 0) {
+              window.alert("Votre article à été ajouté au panier !");
+              studentsData.push([localStorage._id, quantity_item, color_item]);
+              localStorage.setItem("myArray", JSON.stringify(studentsData));
+              console.log(array);
+            }
+          }
         }
       }
     }
   };
-  xhr.send();
 }
+xhr.send();
