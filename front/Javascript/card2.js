@@ -202,7 +202,6 @@ window.onload = function () {
       })(i);
     }
   })();
-  document.getElementById("order").addEventListener("click", validateForm);
 };
 
 //Instauration formulaire avec regex
@@ -301,7 +300,10 @@ function getForm() {
 }
 getForm();
 
-function send(e) {
+document.getElementById("order").addEventListener("submit", send);
+
+function send() {
+  document.location.href = "confirmation.html";
   let idProducts = [];
   for (let i = 0; i < array.length; i++) {
     idProducts.push(array[i][0]);
@@ -352,8 +354,6 @@ function send(e) {
       console.log(data);
       localStorage.clear();
       localStorage.setItem("orderId", data.orderId);
-
-      document.location.href = "confirmation.html";
     })
     .catch((err) => {
       alert("Problème avec fetch : " + err.message);

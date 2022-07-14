@@ -107,6 +107,7 @@ if (search_params.has("id")) {
         } else {
           //if the sofa does not exist
           // Create and add values in the localstorage
+          array = JSON.parse(localStorage.getItem("myArray")) || [];
           if (array == null || array == []) {
             studentsData.push([localStorage._id, quantity_item, color_item]);
             localStorage.setItem("myArray", JSON.stringify(studentsData));
