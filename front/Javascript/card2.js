@@ -193,6 +193,8 @@ window.onload = function () {
               while (myNode.firstChild) {
                 myNode.removeChild(myNode.firstChild);
               }
+              array.splice(i, 1);
+              console.log(array);
               localStorage.setItem("myArray", JSON.stringify(array));
               location.reload();
             }
@@ -303,13 +305,6 @@ getForm();
 document.getElementById("order").addEventListener("submit", send);
 
 function send() {
-  document.location.href = "confirmation.html";
-  let idProducts = [];
-  for (let i = 0; i < array.length; i++) {
-    idProducts.push(array[i][0]);
-  }
-  console.log(idProducts);
-
   /**
    *
    * Expects request to contain:
@@ -323,6 +318,8 @@ function send() {
    * products: [string] <-- array of product _id
    *
    */
+
+  console.log("dkofk");
   commandeFinale = {
     contact: {
       firstName: document.getElementById("firstName").value,
@@ -352,8 +349,12 @@ function send() {
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
-      localStorage.clear();
+      // localStorage.clear();
       localStorage.setItem("orderId", data.orderId);
+      // document.location.href = "confirmation.html";
+      // window.location.href = "confirmation.html";
+      // document.getElementsByClassName("cart__order__form").action =
+      //   "confirmation.html";
     })
     .catch((err) => {
       alert("Problème avec fetch : " + err.message);
