@@ -1,5 +1,3 @@
-// pour différancier la page confirmation et panier
-const page = document.location.href;
 // retrieve the value of the localstorage in the variable "array"
 array = JSON.parse(localStorage.getItem("myArray")) || [];
 
@@ -302,7 +300,7 @@ function getForm() {
 }
 getForm();
 
-document.getElementById("order").addEventListener("submit", send);
+document.getElementById("order  ").addEventListener("click", send);
 
 function send() {
   /**
@@ -336,27 +334,20 @@ function send() {
 
   // si le panierId contient des articles et que le clic est autorisé
   // envoi à la ressource api
-  const options = {
+
+  const result = fetch("http://localhost:3000/api/products/order", {
     method: "POST",
-    body: JSON.stringify(commandeFinale),
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-  };
-
-  fetch("http://localhost:3000/api/products/order", options)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      // localStorage.clear();
-      localStorage.setItem("orderId", data.orderId);
-      // document.location.href = "confirmation.html";
-      // window.location.href = "confirmation.html";
-      // document.getElementsByClassName("cart__order__form").action =
-      //   "confirmation.html";
-    })
-    .catch((err) => {
-      alert("Problème avec fetch : " + err.message);
-    });
+    body: JSON.stringify(commandeFinale),
+  });
+  result.then(async (answer) => {
+    try {
+      const data = await answer.json();
+      window.location.href = `confirmation.html?id=${data.orderId}`;
+      localStorage.clear();
+    } catch (e) {}
+  });
 }
