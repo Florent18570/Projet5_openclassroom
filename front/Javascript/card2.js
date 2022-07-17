@@ -300,9 +300,12 @@ function getForm() {
 }
 getForm();
 
-document.getElementById("order  ").addEventListener("click", send);
+const myform = document.getElementById("cart__order__form");
+console.log(myform);
+myform.addEventListener("submit", (e) => {
+  e.preventDefault();
+  console.log("form submitted");
 
-function send() {
   /**
    *
    * Expects request to contain:
@@ -317,7 +320,12 @@ function send() {
    *
    */
 
-  console.log("dkofk");
+  let idProducts = [];
+  for (let i = 0; i < array.length; i++) {
+    idProducts.push(array[i][0]);
+  }
+  console.log(idProducts);
+
   commandeFinale = {
     contact: {
       firstName: document.getElementById("firstName").value,
@@ -346,8 +354,10 @@ function send() {
   result.then(async (answer) => {
     try {
       const data = await answer.json();
+      // if you want to submit the form here
+
+      console.log(data.orderId);
       window.location.href = `confirmation.html?id=${data.orderId}`;
-      localStorage.clear();
     } catch (e) {}
   });
-}
+});
