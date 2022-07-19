@@ -120,10 +120,10 @@ if (search_params.has("id")) {
           //canap sinon ajouter +1 dans l'ancien canap
           else {
             array = JSON.parse(localStorage.getItem("myArray"));
-            var l = 0;
 
             // this condition to check if the combination color + id  exists
             for (var m = 0; m < array.length; m++) {
+              var l = 0;
               // If the combination exist
               if (
                 array[m][0] == id &&
@@ -141,6 +141,7 @@ if (search_params.has("id")) {
                 // The quantity cannot exceed 100 in the basket
                 if (storageqte + qte_form > 100) {
                   window.alert("Le nombre de canapé dépasse la limite fixé ! ");
+                  l = 1;
                 }
 
                 // Adding the quantity of the selected sofa to the basket
@@ -158,6 +159,8 @@ if (search_params.has("id")) {
                 }
               }
             }
+
+            console.log(l);
 
             //if the item does not exist in the cart and in the localstorage (id,quantity, color)
             if (l == 0) {
