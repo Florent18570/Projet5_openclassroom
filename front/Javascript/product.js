@@ -2,6 +2,14 @@
 var urlcourante = document.location.href;
 var url = new URL(urlcourante);
 var search_params = new URLSearchParams(url.search);
+var erreur = 0;
+var erreur2 = 0;
+var erreur3 = 0;
+var erreur4 = 0;
+var erreur5 = 0;
+var erreur6 = 0;
+
+var elementcreate = 0;
 
 if (search_params.has("id")) {
   var id = search_params.get("id");
@@ -89,11 +97,27 @@ if (search_params.has("id")) {
        * the form must be filled in according to some condition, the values must not be empty, the quantity must be between 1 and 100
        * */
       function localStorageadd() {
+        if (elementcreate == 0) {
+          alert_champsnul = document.createElement("h4");
+          elementcreate = 1;
+        }
         if (
           document.getElementById("colors").value == "" ||
           document.getElementById("quantity").value == ""
         ) {
-          window.alert("Veuillez remplir tout les champs");
+          if (erreur == 0) {
+            alert_champsnul.innerHTML = "Veuillez remplir tout les champs ! ";
+            alert_champsnul.style.color = "red";
+            document
+              .getElementById("item__content__settings")
+              .appendChild(alert_champsnul);
+            erreur6 = 0;
+            erreur5 = 0;
+            erreur4 = 0;
+            erreur3 = 0;
+            erreur2 = 0;
+            erreur++;
+          }
         } else if (
           document.getElementById("colors").value ==
           "--SVP, choisissez une couleur --"
@@ -103,7 +127,20 @@ if (search_params.has("id")) {
           document.getElementById("quantity").value <= 0 ||
           document.getElementById("quantity").value > 100
         ) {
-          window.alert("Merci de remplir une quantité entre 1 et 100");
+          if (erreur2 == 0) {
+            alert_champsnul.innerHTML =
+              "Merci de remplir une quantité entre 1 et 100";
+            alert_champsnul.style.color = "red";
+            document
+              .getElementById("item__content__settings")
+              .appendChild(alert_champsnul);
+            erreur6 = 0;
+            erreur5 = 0;
+            erreur4 = 0;
+            erreur3 = 0;
+            erreur2++;
+            erreur = 0;
+          }
         } else {
           //if the sofa does not exist
           // Create and add values in the localstorage
@@ -140,7 +177,20 @@ if (search_params.has("id")) {
 
                 // The quantity cannot exceed 100 in the basket
                 if (storageqte + qte_form > 100) {
-                  window.alert("Le nombre de canapé dépasse la limite fixé ! ");
+                  if (erreur3 == 0) {
+                    alert_champsnul.innerHTML =
+                      "Le nombre de canapé dépasse la limite fixé ! ";
+                    alert_champsnul.style.color = "red";
+                    document
+                      .getElementById("item__content__settings")
+                      .appendChild(alert_champsnul);
+                    erreur6 = 0;
+                    erreur5 = 0;
+                    erreur4 = 0;
+                    erreur3++;
+                    erreur2 = 0;
+                    erreur = 0;
+                  }
                   l = 1;
                 }
 
@@ -150,21 +200,42 @@ if (search_params.has("id")) {
                   console.log(storageqte + qte_form);
                   localStorage.setItem("myArray", JSON.stringify(array));
                   array = JSON.parse(localStorage.getItem("myArray")) || [];
-                  window.alert(
-                    "combinaison canap existe déjà vous avez ajouté " +
-                      quantity_item +
-                      " items dans le panier"
-                  );
+                  if (erreur4 == 0) {
+                    alert_champsnul.innerHTML =
+                      "Ce canapé existe déjà dans le panier vous en avez ajouté " +
+                      quantity_item;
+                    alert_champsnul.style.color = "green";
+                    document
+                      .getElementById("item__content__settings")
+                      .appendChild(alert_champsnul);
+                    erreur6 = 0;
+                    erreur5 = 0;
+                    erreur4++;
+                    erreur3 = 0;
+                    erreur2 = 0;
+                    erreur = 0;
+                  }
                   l = 1;
                 }
               }
             }
 
-            console.log(l);
-
             //if the item does not exist in the cart and in the localstorage (id,quantity, color)
             if (l == 0) {
-              window.alert("Votre article à été ajouté au panier !");
+              if (erreur5 == 0) {
+                alert_champsnul.innerHTML =
+                  "Votre article à été ajouté au panier ! ";
+                alert_champsnul.style.color = "green";
+                document
+                  .getElementById("item__content__settings")
+                  .appendChild(alert_champsnul);
+                erreur6 = 0;
+                erreur5++;
+                erreur4 = 0;
+                erreur3 = 0;
+                erreur2 = 0;
+                erreur = 0;
+              }
               studentsData.push([localStorage._id, quantity_item, color_item]);
               localStorage.setItem("myArray", JSON.stringify(studentsData));
               console.log(array);

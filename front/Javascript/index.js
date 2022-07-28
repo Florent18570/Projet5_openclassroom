@@ -36,5 +36,12 @@ xhr.onreadystatechange = function () {
       document.getElementById("article" + i).appendChild(p);
     }
   }
+
+  if (xhr.status == 0) {
+    h3 = document.createElement("h3");
+    h3.innerHTML = "Erreur de liaison avec le serveur !";
+    h3.style.color = "red";
+    document.getElementById("items").appendChild(h3);
+  }
 };
 xhr.send();
