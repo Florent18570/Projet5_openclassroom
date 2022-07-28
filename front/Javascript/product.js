@@ -81,9 +81,10 @@ if (search_params.has("id")) {
       // Store an array in local storage
       // The array to store
       if (localStorage.getItem("myArray") != []) {
-        var studentsData = JSON.parse(localStorage.getItem("myArray")) || [];
+        var localstorageData =
+          JSON.parse(localStorage.getItem("myArray")) || [];
       } else {
-        var studentsData = [];
+        var localstorageData = [];
       }
 
       document
@@ -147,8 +148,12 @@ if (search_params.has("id")) {
           array = JSON.parse(localStorage.getItem("myArray")) || [];
           console.log(array);
           if (array == null || array.length == 0) {
-            studentsData.push([localStorage._id, quantity_item, color_item]);
-            localStorage.setItem("myArray", JSON.stringify(studentsData));
+            localstorageData.push([
+              localStorage._id,
+              quantity_item,
+              color_item,
+            ]);
+            localStorage.setItem("myArray", JSON.stringify(localstorageData));
             array = JSON.parse(localStorage.getItem("myArray")) || [];
           }
 
@@ -236,8 +241,12 @@ if (search_params.has("id")) {
                 erreur2 = 0;
                 erreur = 0;
               }
-              studentsData.push([localStorage._id, quantity_item, color_item]);
-              localStorage.setItem("myArray", JSON.stringify(studentsData));
+              localstorageData.push([
+                localStorage._id,
+                quantity_item,
+                color_item,
+              ]);
+              localStorage.setItem("myArray", JSON.stringify(localstorageData));
               console.log(array);
             }
           }
